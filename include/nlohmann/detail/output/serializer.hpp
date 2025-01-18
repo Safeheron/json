@@ -11,6 +11,7 @@
 
 #include <algorithm> // reverse, remove, fill, find, none_of
 #include <array> // array
+#include <cerrno> // for SGX
 #include <clocale> // localeconv, lconv
 #include <cmath> // labs, isfinite, isnan, signbit
 #include <cstddef> // size_t, ptrdiff_t
@@ -67,9 +68,12 @@ class serializer
     serializer(output_adapter_t<char> s, const char ichar,
                error_handler_t error_handler_ = error_handler_t::strict)
         : o(std::move(s))
-        , loc(std::localeconv())
-        , thousands_sep(loc->thousands_sep == nullptr ? '\0' : std::char_traits<char>::to_char_type(* (loc->thousands_sep)))
-        , decimal_point(loc->decimal_point == nullptr ? '\0' : std::char_traits<char>::to_char_type(* (loc->decimal_point)))
+//        , loc(std::localeconv())
+//        , thousands_sep(loc->thousands_sep == nullptr ? '\0' : std::char_traits<char>::to_char_type(* (loc->thousands_sep)))
+//        , decimal_point(loc->decimal_point == nullptr ? '\0' : std::char_traits<char>::to_char_type(* (loc->decimal_point)))
+         , loc(nullptr)
+         , thousands_sep('\0')
+         , decimal_point('\0')
         , indent_char(ichar)
         , indent_string(512, indent_char)
         , error_handler(error_handler_)
@@ -832,6 +836,9 @@ class serializer
 
         // the actual conversion
         // NOLINTNEXTLINE(cppcoreguidelines-pro-type-vararg,hicpp-vararg)
+        // Note: In the SGX trusted execution environment, std::snprintf only formats floating-point numbers
+        // according to the standard C environment's floating-point formatting rules.
+        // Refer to: https://github.com/intel/linux-sgx/blob/main/sdk/tlibc/stdio/local.h
         std::ptrdiff_t len = (std::snprintf)(number_buffer.data(), number_buffer.size(), "%.*g", d, x);
 
         // negative value indicates an error
@@ -966,7 +973,8 @@ class serializer
     std::array<char, 64> number_buffer{{}};
 
     /// the locale
-    const std::lconv* loc = nullptr;
+//    const std::lconv* loc = nullptr;
+    const void* loc = nullptr;
     /// the locale's thousand separator character
     const char thousands_sep = '\0';
     /// the locale's decimal point character

@@ -9,6 +9,7 @@
 #pragma once
 
 #include <array> // array
+#include <cerrno> // for SGX
 #include <clocale> // localeconv
 #include <cstddef> // size_t
 #include <cstdio> // snprintf
@@ -142,9 +143,10 @@ class lexer : public lexer_base<BasicJsonType>
     JSON_HEDLEY_PURE
     static char get_decimal_point() noexcept
     {
-        const auto* loc = localeconv();
-        JSON_ASSERT(loc != nullptr);
-        return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
+//        const auto* loc = localeconv();
+//        JSON_ASSERT(loc != nullptr);
+//        return (loc->decimal_point == nullptr) ? '.' : *(loc->decimal_point);
+        return '.';
     }
 
     /////////////////////
