@@ -15,6 +15,11 @@
 #include <string> // basic_string
 #include <vector> // vector
 
+#define JSON_NO_IO // for SGX
+#ifndef JSON_NO_IO
+#include <iosfwd> // istream, ostream
+#endif  // JSON_NO_IO
+
 #ifndef JSON_NO_IO
     #include <ios>      // streamsize
     #include <ostream>  // basic_ostream

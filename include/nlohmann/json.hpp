@@ -22,6 +22,9 @@
 #include <cstddef> // nullptr_t, ptrdiff_t, size_t
 #include <functional> // hash, less
 #include <initializer_list> // initializer_list
+
+#define JSON_NO_IO  //for SGX
+
 #ifndef JSON_NO_IO
     #include <iosfwd> // istream, ostream
 #endif  // JSON_NO_IO

@@ -30,6 +30,8 @@
     #endif
 #endif
 
+#define JSON_HAS_CPP_11
+
 // C++ language standard detection
 // if the user manually specified the used c++ version this is skipped
 #if !defined(JSON_HAS_CPP_20) && !defined(JSON_HAS_CPP_17) && !defined(JSON_HAS_CPP_14) && !defined(JSON_HAS_CPP_11)

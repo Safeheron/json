@@ -12,6 +12,9 @@
 #include <cctype> // isdigit
 #include <cerrno> // errno, ERANGE
 #include <cstdlib> // strtoull
+
+#define JSON_NO_IO // for SGX
+
 #ifndef JSON_NO_IO
     #include <iosfwd> // ostream
 #endif  // JSON_NO_IO
